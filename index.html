@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Wedding of Indah & Akbar</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --maroon: #5e0b15;
+            --gold: #e5c158;
+            --gold-light: #f9e596;
+            --text-white: #ffffff;
+            --text-cream: #f5efe6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #120406;
+            color: var(--text-white);
+            overflow-x: hidden;
+        }
+
+        /* Wrapper Mobile-First agar proporsional di semua layar */
+        .app-container {
+            max-width: 480px;
+            margin: 0 auto;
+            background-color: #1a0508;
+            box-shadow: 0 0 40px rgba(0,0,0,0.9);
+            position: relative;
+        }
+
+        /* Cover Overlay (Sampul Awal) */
+        #cover-screen {
+            position: fixed;
+            inset: 0;
+            max-width: 480px;
+            margin: 0 auto;
+            z-index: 9999;
+            background: linear-gradient(to bottom, rgba(20, 3, 6, 0.45) 0%, rgba(20, 3, 6, 0.35) 50%, rgba(20, 3, 6, 0.95) 100%),
+                        url('3.jpg') center top / cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+            padding: 50px 24px 60px;
+            transition: transform 0.9s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease;
+        }
+
+        #cover-screen.opened {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Section dengan Teks di Atas Foto */
+        .photo-section {
+            position: relative;
+            min-height: 100vh;
+            width: 100%;
+            background-position: center top;
+            background-size: cover;
+            background-repeat: no-repeat;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 60px 22px 50px;
+            overflow: hidden;
+        }
+
+        /* Variasi gradasi gelap agar wajah tetap terlihat jelas sementara teks terbaca tajam */
+        .overlay-bottom {
+            background: linear-gradient(to bottom, 
+                rgba(18, 4, 6, 0.25) 0%, 
+                rgba(18, 4, 6, 0.15) 38%, 
+                rgba(18, 4, 6, 0.82) 65%, 
+                rgba(18, 4, 6, 0.97) 100%);
+        }
+
+        .overlay-full-soft {
+            background: linear-gradient(to bottom, 
+                rgba(18, 4, 6, 0.72) 0%, 
+                rgba(18, 4, 6, 0.58) 45%, 
+                rgba(18, 4, 6, 0.88) 85%, 
+                rgba(18, 4, 6, 0.98) 100%);
+            justify-content: center;
+        }
+
+        /* Tipografi */
+        .subtitle-gold {
+            font-size: 0.75rem;
+            letter-spacing: 3.5px;
+            text-transform: uppercase;
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+        }
+
+        .couple-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 2.3rem;
+            color: var(--gold-light);
+            line-height: 1.2;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.9);
+            margin-bottom: 8px;
+        }
+
+        .bride-groom-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: var(--gold-light);
+            line-height: 1.25;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+            margin-bottom: 6px;
+        }
+
+        .parent-text {
+            font-size: 0.88rem;
+            color: var(--text-cream);
+            line-height: 1.6;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.95);
+        }
+
+        /* Kotak Kaca Transparan (Glassmorphism) di atas Foto */
+        .glass-box {
+            background: rgba(28, 6, 10, 0.62);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(229, 193, 88, 0.35);
+            border-radius: 18px;
+            padding: 22px 18px;
+            margin-top: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .divider-gold {
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 14px auto;
+        }
+
+        /* Tombol */
+        .btn-gold {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #d4af37, #f3d778, #b8860b);
+            color: #2b060b;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 12px 26px;
+            border-radius: 50px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+            transition: transform 0.25s ease;
+        }
+
+        .btn-gold:active {
+            transform: scale(0.96);
+        }
+
+        /* Countdown */
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .count-item {
+            background: rgba(94, 11, 21, 0.75);
+            border: 1px solid rgba(229, 193, 88, 0.4);
+            border-radius: 12px;
+            padding: 10px 4px;
+            text-align: center;
+        }
+
+        .count-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gold-light);
+            display: block;
+        }
+
+        .count-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-cream);
+        }
+
+        /* Daftar Keluarga & Turut Mengundang */
+        .family-list {
+            list-style: none;
+            font-size: 0.82rem;
+            line-height: 1.65;
+            color: var(--text-cream);
+            text-align: center;
+        }
+
+        .family-list li {
+            margin-bottom: 5px;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed rgba(229, 193, 88, 0.18);
+        }
+
+        .family-list li:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .role-tag {
+            color: var(--gold);
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Animasi Muncul Saat Scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: all 0.85s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Tombol Musik Mengambang */
+        .music-btn {
+            position: fixed;
+            bottom: 22px;
+            right: 22px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(94, 11, 21, 0.9);
+            border: 1.5px solid var(--gold);
+            color: var(--gold);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+        }
+
+        .spin {
+            animation: spinSlow 6s linear infinite;
+        }
+
+        @keyframes spinSlow {
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+
+    <!-- Audio Latar -->
+    <audio id="bg-music" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/02/07/audio_182201583c.mp3?filename=romantic-piano-110221.mp3" type="audio/mpeg">
+    </audio>
+
+    <button id="music-toggle" class="music-btn" onclick="toggleMusic()" title="Putar/Jeda Musik">
+        <i class="fas fa-compact-disc fa-lg spin" id="music-icon"></i>
+    </button>
+
+    <!-- 1. SAMPUL DEPAN (FOTO 3.jpg) -->
+    <div id="cover-screen">
+        <div>
+            <p class="subtitle-gold">The Wedding Of</p>
+            <h1 class="couple-title">Indah &amp; Akbar</h1>
+            <p style="font-size: 0.85rem; color: var(--text-cream); letter-spacing: 2px;">SENIN, 18 JANUARI 2027</p>
+        </div>
+
+        <div class="glass-box" style="width: 100%; background: rgba(20, 3, 6, 0.72);">
+            <p style="font-size: 0.78rem; color: var(--gold); margin-bottom: 4px;">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
+            <h3 id="guest-name" style="font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; margin-bottom: 14px; color: #fff;">Tamu Undangan</h3>
+            <button class="btn-gold" onclick="openInvitation()">
+                <i class="fas fa-envelope-open-text"></i> Buka Undangan
+            </button>
+        </div>
+    </div>
+
+    <!-- 2. PEMBUKA & AYAT SUCI (FOTO 3.jpg) -->
+    <section class="photo-section overlay-bottom" style="background-image: url('3.jpg');">
+        <div class="reveal" style="text-align: center;">
+            <p class="subtitle-gold">Assalamu'alaikum Wr. Wb.</p>
+            <div class="glass-box">
+                <p style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.05rem; line-height: 1.6; color: var(--text-cream);">
+                    "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu isteri-isteri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya diantaramu rasa kasih dan sayang."
+                </p>
+                <p style="color: var(--gold); font-size: 0.8rem; font-weight: 600; margin-top: 8px;">(QS. Ar-Rum: 21)</p>
+                <div class="divider-gold"></div>
+                <p style="font-size: 0.82rem; line-height: 1.6; color: var(--text-cream);">
+                    Dengan memohon rahmat dan ridho Allah SWT, kami bermaksud menyelenggarakan pernikahan putra-putri kami:
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. MEMPELAI WANITA (TEKS DI ATAS FOTO 1.jpg) -->
+    <section class="photo-section overlay-bottom" style="background-image: url('1.jpg');">
+        <div class="reveal" style="text-align: center;">
+            <p class="subtitle-gold">Mempelai Wanita</p>
+            <h2 class="bride-groom-name">Andi Indah Salsabillah Putri</h2>
+            <div class="divider-gold"></div>
+            <div class="glass-box">
+                <p class="parent-text">
+                    Putri pertama dari:<br>
+                    <strong style="color: var(--gold-light); font-size: 0.95rem;">Bapak H. Ambo Lolo</strong><br>
+                    &amp;<br>
+                    <strong style="color: var(--gold-light); font-size: 0.95rem;">Ibu Hj. Andi Elis</strong>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. MEMPELAI PRIA (TEKS DI ATAS FOTO 2.jpg) -->
+    <section class="photo-section overlay-bottom" style="background-image: url('2.jpg');">
+        <div class="reveal" style="text-align: center;">
+            <p class="subtitle-gold">Mempelai Pria</p>
+            <h2 class="bride-groom-name">Baso' Muhammad Nuruddin Akbar, S.Pi</h2>
+            <div class="divider-gold"></div>
+            <div class="glass-box">
+                <p class="parent-text">
+                    Putra pertama dari:<br>
+                    <strong style="color: var(--gold-light); font-size: 0.95rem;">Bapak H. Basok Mappasessuk</strong><br>
+                    &amp;<br>
+                    <strong style="color: var(--gold-light); font-size: 0.95rem;">Ibu Hj. Besse' Rosdiana</strong>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. JADWAL AKAD & RESEPSI (TEKS DI ATAS FOTO 5.jpg) -->
+    <section class="photo-section overlay-full-soft" style="background-image: url('5.jpg');">
+        <div class="reveal" style="text-align: center;">
+            <p class="subtitle-gold">Save The Date</p>
+            <h2 class="bride-groom-name" style="font-size: 2rem;">Rangkaian Acara</h2>
+
+            <!-- Hitung Mundur -->
+            <div class="countdown-grid">
+                <div class="count-item"><span class="count-num" id="days">00</span><span class="count-label">Hari</span></div>
+                <div class="count-item"><span class="count-num" id="hours">00</span><span class="count-label">Jam</span></div>
+                <div class="count-item"><span class="count-num" id="minutes">00</span><span class="count-label">Menit</span></div>
+                <div class="count-item"><span class="count-num" id="seconds">00</span><span class="count-label">Detik</span></div>
+            </div>
+
+            <!-- Akad Nikah -->
+            <div class="glass-box" style="text-align: center;">
+                <h3 style="font-family: 'Cormorant Garamond', serif; color: var(--gold-light); font-size: 1.45rem; margin-bottom: 6px;">
+                    <i class="fas fa-ring" style="font-size: 1rem;"></i> Akad Nikah
+                </h3>
+                <p style="font-weight: 600; font-size: 0.9rem; color: #fff;">Senin, 18 Januari 2027</p>
+                <p style="font-size: 0.85rem; color: var(--gold); margin-bottom: 8px;">Pukul : 09.00 WIB - Selesai</p>
+                <p style="font-size: 0.82rem; line-height: 1.5; color: var(--text-cream);">
+                    <strong>Bertempat :</strong><br>
+                    Di Kelurahan Tanjung Solok<br>
+                    Di Kediaman Mempelai Wanita
+                </p>
+            </div>
+
+            <!-- Resepsi -->
+            <div class="glass-box" style="text-align: center;">
+                <h3 style="font-family: 'Cormorant Garamond', serif; color: var(--gold-light); font-size: 1.45rem; margin-bottom: 6px;">
+                    <i class="fas fa-glass-cheers" style="font-size: 1rem;"></i> Resepsi Pernikahan
+                </h3>
+                <p style="font-weight: 600; font-size: 0.9rem; color: #fff;">Senin, 18 Januari 2027</p>
+                <p style="font-size: 0.85rem; color: var(--gold); margin-bottom: 8px;">Pukul : 10.00 WIB - Selesai</p>
+                <p style="font-size: 0.82rem; line-height: 1.5; color: var(--text-cream); margin-bottom: 14px;">
+                    <strong>Bertempat :</strong><br>
+                    Jl. Batang Hari RT.01 RW.01 Kelurahan Tanjung Solok,<br>
+                    Kec. Kuala Jambi, Kab. Tanjung Jabung Timur
+                </p>
+                <a href="https://maps.app.goo.gl/Bt26EWRuqycqx97J6" target="_blank" class="btn-gold">
+                    <i class="fas fa-map-marker-alt"></i> Buka Lokasi Google Maps
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. KELUARGA BESAR (TEKS DI ATAS FOTO 6.jpg) -->
+    <section class="photo-section overlay-full-soft" style="background-image: url('6.jpg');">
+        <div class="reveal" style="text-align: center;">
+            <p class="subtitle-gold">Kami Yang Berbahagia</p>
+            <h2 class="bride-groom-name" style="font-size: 1.9rem;">Keluarga Besar</h2>
+
+            <!-- Keluarga Besar Wanita -->
+            <div class="glass-box">
+                <h4 style="color: var(--gold-light); font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; margin-bottom: 10px;">
+                    Keluarga Besar Wanita
+                </h4>
+                <ul class="family-list">
+                    <li>H. Ambok Lolo / Hj. Andi Elis <span class="role-tag">(Ayah / Ibu)</span></li>
+                    <li>H. Musdalifah (Alm) / Siti Haisyah <span class="role-tag">(Kakek / Nenek)</span></li>
+                    <li>Andi Bambang (Alm) / Nurlela <span class="role-tag">(Kakek / Nenek)</span></li>
+                    <li>Andi Kasau (Alm) / Andi Wawo (Almh) <span class="role-tag">(Buyut)</span></li>
+                </ul>
+            </div>
+
+            <!-- Keluarga Besar Pria -->
+            <div class="glass-box">
+                <h4 style="color: var(--gold-light); font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; margin-bottom: 10px;">
+                    Keluarga Besar Pria
+                </h4>
+                <ul class="family-list">
+                    <li>H. Baso' Mappasessuk / Hj. Besse' Rosdiana <span class="role-tag">(Ayah / Ibu)</span></li>
+                    <li>H. Ambo Nyompah / Hj. Besse Landa <span class="role-tag">(Kakek / Nenek)</span></li>
+                    <li>H. Lohang (Daeng Sangiang) (Alm) <span class="role-tag">(Kakek)</span></li>
+                    <li>Hj. Besse Cennang <span class="role-tag">(Nenek)</span></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. TURUT MENGUNDANG (TEKS DI ATAS FOTO 7.jpg) -->
+    <section class="photo-section overlay-full-soft" style="background-image: url('7.jpg');">
+        <div class="reveal" style="text-align: center;">
+            <p class="subtitle-gold">Hormat Kami</p>
+            <h2 class="bride-groom-name" style="font-size: 1.9rem;">Turut Mengundang</h2>
+
+            <div class="glass-box">
+                <ul class="family-list">
+                    <li>H. Rudi / Hj. Indo Anjak <span class="role-tag">(Paman / Bibi')</span></li>
+                    <li>H. Acok / Hj. Hasnah <span class="role-tag">(Paman / Bibi)</span></li>
+                    <li>Hasanuddin / Endah Lidia Sari <span class="role-tag">(Paman / Bibi')</span></li>
+                    <li>Musrianto Efendi (Mullak) <span class="role-tag">(Paman)</span></li>
+                    <li>Budiman / Andi Batari Kuniang <span class="role-tag">(Paman / Bibi')</span></li>
+                    <li>H. Lomek (Majelis Hidayah) <span class="role-tag">(Kakek)</span></li>
+                    <li>H. Hermansyah <span class="role-tag">(Paman)</span></li>
+                    <li>H. Yunus <span class="role-tag">(Paman)</span></li>
+                    <li>H. Rahman <span class="role-tag">(Ketua RT.01 Tj. Solok)</span></li>
+                    <li>H. Baso' Mappanyongki / Hj. Marwah <span class="role-tag">(Kakek / Nenek)</span></li>
+                    <li>Mahyudin / Erna Wati <span class="role-tag">(Paman / Bibi')</span></li>
+                    <li>Darwis / Novianti <span class="role-tag">(Paman / Bibi')</span></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. PENUTUP (TEKS DI ATAS FOTO 3.jpg) -->
+    <section class="photo-section overlay-bottom" style="background-image: url('3.jpg');">
+        <div class="reveal" style="text-align: center;">
+            <div class="glass-box">
+                <p style="font-size: 0.84rem; line-height: 1.65; color: var(--text-cream); margin-bottom: 12px;">
+                    Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu kepada kedua mempelai.
+                </p>
+                <p class="subtitle-gold" style="margin-bottom: 4px;">Wassalamu'alaikum Wr. Wb.</p>
+                <div class="divider-gold"></div>
+                <h2 class="couple-title" style="font-size: 1.85rem; margin-bottom: 4px;">Indah &amp; Akbar</h2>
+                <p style="font-size: 0.75rem; color: var(--gold);">18 . 01 . 2027</p>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<script>
+    // Ambil nama tamu dari parameter URL (?to=Nama+Tamu)
+    const urlParams = new URLSearchParams(window.location.search);
+    const guest = urlParams.get('to');
+    if (guest) {
+        document.getElementById('guest-name').textContent = guest;
+    }
+
+    // Fungsi Buka Undangan & Putar Musik
+    const music = document.getElementById('bg-music');
+    const musicBtn = document.getElementById('music-toggle');
+    const musicIcon = document.getElementById('music-icon');
+    let isPlaying = false;
+
+    function openInvitation() {
+        document.getElementById('cover-screen').classList.add('opened');
+        musicBtn.style.display = 'flex';
+        music.play().then(() => {
+            isPlaying = true;
+        }).catch(() => {
+            isPlaying = false;
+            musicIcon.classList.remove('spin');
+        });
+    }
+
+    function toggleMusic() {
+        if (isPlaying) {
+            music.pause();
+            musicIcon.classList.remove('spin');
+        } else {
+            music.play();
+            musicIcon.classList.add('spin');
+        }
+        isPlaying = !isPlaying;
+    }
+
+    // Hitung Mundur ke 18 Januari 2027, 09:00 WIB
+    const targetDate = new Date("Jan 18, 2027 09:00:00").getTime();
+    setInterval(() => {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        if (distance > 0) {
+            document.getElementById("days").innerText = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
+            document.getElementById("hours").innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+            document.getElementById("minutes").innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            document.getElementById("seconds").innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
+        }
+    }, 1000);
+
+    // Animasi Reveal Saat Scroll
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
